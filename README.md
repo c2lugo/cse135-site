@@ -13,6 +13,13 @@
     * It executes `git pull origin main` to fetch the latest changes immediately.
 
 ## Authentication
-To access site:
+To access the site:
 * **Username:** carlos
 * **Password:** cse135pw
+
+## Server Identity Obfuscation
+I modified the HTTP `Server` header to display "CSE135 Server" instead of the default Apache version.
+
+1.  **Installed ModSecurity:** I installed the `libapache2-mod-security2` module.
+2.  **Configured Signature:** I added the directive `SecServerSignature "CSE135 Server"` to the security config.
+3.  **Adjusted Tokens:** I set `ServerTokens Full` and `ServerSignature Off` in the main config to allow ModSecurity to be able rewrite the header string.
