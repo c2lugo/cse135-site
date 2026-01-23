@@ -11,3 +11,8 @@
 4. The Action logs into my DigitalOcean Droplet using an SSH Key (stored as a GitHub Secret).
     * It navigates to the web server directory (`/var/www/carloslugo.dev/html`).
     * It executes `git pull origin main` to fetch the latest changes immediately.
+
+## Authentication
+To access site:
+* **Username:** carlos
+* **Password:** cse135pw
