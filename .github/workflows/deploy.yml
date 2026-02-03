@@ -13,5 +13,11 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          # Fix for "dubious ownership" error
+          git config --global --add safe.directory /var/www/carloslugo.dev/html
+          
           cd /var/www/carloslugo.dev/html
           git pull origin main
+          
+          # Maintain correct permissions for the web server
+          sudo chown -R www-data:www-data /var/www/carloslugo.dev/html
