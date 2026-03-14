@@ -13,18 +13,29 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          # 1. Trust the directory
-          git config --global --add safe.directory /var/www/carloslugo.dev/html
-          
+          # 1. Update the Main Portfolio Site
           cd /var/www/carloslugo.dev/html || exit
-          
-          # 2. Fetch the latest from GitHub without merging yet
+          git config --global --add safe.directory /var/www/carloslugo.dev/html
           git fetch origin main
-          
-          # 3. FORCE the local files to match GitHub exactly (Destructive)
-          # This wipes any local "Forbidden" or "awkward" edits on the server
-          git reset --hard origin/main
-          
-          # 4. Re-apply permissions for Apache
+          # Pull files into a temp subfolder then move them up
+          git checkout origin/main -- carloslugo.dev/
+          cp -rn carloslugo.dev/* . 
+          rm -rf carloslugo.dev/
           sudo chown -R www-data:www-data /var/www/carloslugo.dev/html
-          sudo chmod -R 755 /var/www/carloslugo.dev/html
+
+          # 2. Update the Collector Analytics Site
+          sudo mkdir -p /var/www/collector.carloslugo.dev/html
+          cd /var/www/collector.carloslugo.dev/html || exit
+          git config --global --add safe.directory /var/www/collector.carloslugo.dev/html
+          git fetch origin main
+
+          # Pull files into a temp subfolder
+          git checkout origin/main -- collector.carloslugo.dev/
+          # Move contents of the repo folder into the server's html root
+          cp -rn collector.carloslugo.dev/* .
+          rm -rf collector.carloslugo.dev/
+
+          # 3. Permissions & Cleanup
+          sudo mkdir -p /var/www/collector.carloslugo.dev/html/exports
+          sudo chown -R www-data:www-data /var/www/collector.carloslugo.dev/html
+          sudo chmod -R 775 /var/www/collector.carloslugo.dev/html/exports
