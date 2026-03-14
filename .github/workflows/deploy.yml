@@ -19,7 +19,8 @@ jobs:
           git fetch origin main
           # Pull files into a temp subfolder then move them up
           git checkout origin/main -- carloslugo.dev/
-          cp -rn carloslugo.dev/* . 
+          # Sync files (including dotfiles) and overwrite outdated content
+          rsync -a --delete carloslugo.dev/ ./
           rm -rf carloslugo.dev/
           sudo chown -R www-data:www-data /var/www/carloslugo.dev/html
 
@@ -32,7 +33,8 @@ jobs:
           # Pull files into a temp subfolder
           git checkout origin/main -- collector.carloslugo.dev/
           # Move contents of the repo folder into the server's html root
-          cp -rn collector.carloslugo.dev/* .
+          # Keep exports data while updating tracked site files
+          rsync -a --delete --exclude 'exports/' collector.carloslugo.dev/ ./
           rm -rf collector.carloslugo.dev/
 
           # 3. Permissions & Cleanup
